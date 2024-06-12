@@ -1,0 +1,155 @@
+<?php
+
+namespace app\modules\admin\controllers;
+
+use app\models\activeRecord\Organizator;
+use app\models\search\OrganizatorSearch;
+use app\modules\admin\models\forms\EventForm;
+use app\modules\admin\models\forms\OrganizatorForm;
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\web\Response;
+
+/**
+ * OrganizatorsController implements the CRUD actions for Organizator model.
+ */
+class OrganizatorsController extends Controller
+{
+    /**
+     * @inheritDoc
+     */
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
+            ]
+        );
+    }
+
+    /**
+     * Lists all Organizator models.
+     *
+     * @return string
+     */
+    public function actionIndex()
+    {
+        $searchModel = new OrganizatorSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Displays a single Organizator model.
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Organizator model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return string|Response
+     */
+    public function actionCreate()
+    {
+        $model = new OrganizatorForm();
+
+        if ($this->request->isPost) {
+            $model->load($this->request->post());
+            $id = $model->save();
+            if (!empty($id)) {
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing Organizator model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $id ID
+     * @return string|Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate(int $id)
+    {
+        $organizator = $this->findModel($id);
+        $model = new OrganizatorForm();
+        $model->setAttributes($organizator->attributes);
+        $model->id = $organizator->id;
+
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
+            $organizatorId = $model->save();
+            if (!empty($organizatorId)) {
+                return $this->redirect(['view', 'id' => $organizatorId]);
+            }
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Deletes an existing Organizator model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param int $id ID
+     * @return Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete(int $id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Organizator model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param int $id ID
+     * @return Organizator the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel(int $id)
+    {
+        if (($model = Organizator::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+}

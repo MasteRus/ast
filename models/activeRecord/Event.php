@@ -3,8 +3,10 @@
 namespace app\models\activeRecord;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "events".
@@ -23,15 +25,25 @@ class Event extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'events';
+    }
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name'], 'required'],
@@ -44,7 +56,7 @@ class Event extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => Yii::t('app', 'ID'),
@@ -56,12 +68,7 @@ class Event extends ActiveRecord
         ];
     }
 
-    /**
-     * Gets query for [[Organizators]].
-     *
-     * @return ActiveQuery
-     */
-    public function getOrganizators()
+    public function getOrganizators(): ActiveQuery
     {
         return $this
             ->hasMany(Organizator::class, ['id' => 'organizator_id'])
