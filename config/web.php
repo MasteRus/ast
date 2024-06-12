@@ -1,5 +1,8 @@
 <?php
 
+use app\modules\admin\Module as AdminModule;
+use app\modules\front\Module as FrontModule;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -10,6 +13,14 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+    ],
+    'modules' => [
+        'admin' => [
+            'class' => AdminModule::class,
+        ],
+        'front' => [
+            'class' => FrontModule::class,
+        ],
     ],
     'components' => [
         'request' => [
