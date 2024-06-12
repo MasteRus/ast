@@ -7,3 +7,28 @@ services:
       - ./:/app:delegated
     ports:
       - '8000:80'
+    networks:
+      - ast-tz-net
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: ast-tz-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - /data/mysql-ast-tz:/var/lib/mysql
+    networks:
+      - ast-tz-net
+    ports:
+      - "3346:3306"
+
+networks:
+  ast-tz-net:
+    driver: bridge
