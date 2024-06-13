@@ -18,3 +18,11 @@ docker-pull:
 docker-build:
 	docker-compose build
 
+migrate:
+	docker-compose exec app php ./yii migrate --interactive=0
+
+test-migrate:
+	docker-compose exec app php ./tests/bin/yii migrate --interactive=0
+
+test-run:
+	docker-compose exec app php ./vendor/bin/codecept run
