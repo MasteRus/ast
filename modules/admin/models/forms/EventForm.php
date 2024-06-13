@@ -26,7 +26,7 @@ class EventForm extends ModelForm
             [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
             [['description'], 'string'],
-            [['planned_date'], 'date'],
+            [['planned_date'], 'date', 'format' => 'yyyy-MM-dd'],
             ['organizatorIds', 'each', 'rule' => ['integer']],
         ];
     }

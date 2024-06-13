@@ -68,9 +68,7 @@ class OrganizatorsController extends Controller
         $model = new OrganizatorForm();
 
         if ($this->request->isPost) {
-            $model->load($this->request->post());
-            $id = $model->save();
-            if (!empty($id)) {
+            if ($model->load($this->request->post()) && $model->validate() && ($id = $model->save())) {
                 return $this->redirect(['view', 'id' => $id]);
             }
         }
@@ -85,13 +83,12 @@ class OrganizatorsController extends Controller
         $organizator = $this->findModel($id);
         $model = new OrganizatorForm();
         $model->setAttributes($organizator->attributes);
+        $model->eventIds = $organizator->getEvents()->select('id')->column();
         $model->id = $organizator->id;
 
         if (Yii::$app->request->isPost) {
-            $model->load(Yii::$app->request->post());
-            $organizatorId = $model->save();
-            if (!empty($organizatorId)) {
-                return $this->redirect(['view', 'id' => $organizatorId]);
+            if ($model->load($this->request->post()) && $model->validate() && ($id = $model->save())) {
+                return $this->redirect(['view', 'id' => $id]);
             }
         }
 

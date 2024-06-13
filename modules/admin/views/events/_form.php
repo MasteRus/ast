@@ -2,8 +2,7 @@
 
 use app\modules\admin\models\forms\EventForm;
 use kartik\select2\Select2;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use yii\helpers\{Html, Url};
 use yii\jui\DatePicker;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
@@ -30,6 +29,9 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'planned_date')->widget(DatePicker::class, [
                 'language'   => 'ru',
                 'dateFormat' => 'yyyy-MM-dd',
+                'clientOptions' => [
+                    'minDate' => 0
+                ]
             ]) ?>
         </div>
     </div>

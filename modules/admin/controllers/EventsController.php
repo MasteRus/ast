@@ -91,9 +91,7 @@ class EventsController extends Controller
         $model = new EventForm();
 
         if ($this->request->isPost) {
-            $model->load($this->request->post());
-            $id = $model->save();
-            if (!empty($id)) {
+            if ($model->load($this->request->post()) && $model->validate() && ($id = $model->save())) {
                 return $this->redirect(['view', 'id' => $id]);
             }
         }
@@ -112,10 +110,8 @@ class EventsController extends Controller
         $model->id = $event->id;
 
         if (Yii::$app->request->isPost) {
-            $model->load(Yii::$app->request->post());
-            $eventId = $model->save();
-            if (!empty($eventId)) {
-                return $this->redirect(['view', 'id' => $eventId]);
+            if ($model->load($this->request->post()) && ($model->validate()) && ($id = $model->save())) {
+                return $this->redirect(['view', 'id' => $id]);
             }
         }
 
