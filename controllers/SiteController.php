@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\activeRecord\Event;
 use app\models\forms\ContactForm;
 use app\models\forms\LoginForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class SiteController extends Controller
@@ -59,9 +61,19 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
-        return $this->render('index');
+        $events = Event::find()->with('organizators')->all();
+        return $this->render('index', ['events' => $events]);
+    }
+
+    public function actionView(int $id): string
+    {
+        $event = Event::findOne($id);
+        if ($event === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        return $this->render('view', ['event' => $event]);
     }
 
     /**
@@ -91,7 +103,7 @@ class SiteController extends Controller
      *
      * @return Response
      */
-    public function actionLogout()
+    public function actionLogout(): Response
     {
         Yii::$app->user->logout();
 
@@ -121,7 +133,7 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionAbout()
+    public function actionAbout(): string
     {
         return $this->render('about');
     }

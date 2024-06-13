@@ -1,0 +1,74 @@
+.event-card, .event-view-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    background-color: #fff;
+}
+
+.event-title, .event-view-title {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.event-date, .event-view-date {
+    font-style: italic;
+    color: #888;
+}
+
+.organizer-card, .organizer-view-card {
+    display: inline-block;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 1px 3px rgba(0,0,0,.1);
+}
+
+.organizer-name, .organizer-view-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0056b3;
+}
+
+.organizer-info, .organizer-view-info {
+    font-size: 14px;
+    color: #666;
+}
+
+/* view */
+.event-view-container {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.event-view-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.event-view-date {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.event-description {
+    margin-bottom: 20px;
+}
+
+.organizer-view-card {
+    padding: 10px;
+    margin: 5px;
+}
+
+.organizer-view-name {
+    font-size: 16px;
+}
+
+.organizer-view-info {
+    font-size: 14px;
+}
