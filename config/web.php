@@ -23,6 +23,25 @@ $config = [
         ],
     ],
     'components' => [
+        'assetManager' => [
+            // override bundles to use CDN :
+            'bundles' => [
+                'yii\bootstrap5\BootstrapAsset' => [
+                    'sourcePath' => null,
+                    'baseUrl' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.1/dist/',
+                    'css' => [
+                        'css/bootstrap.min.css'
+                    ],
+                ],
+                'yii\bootstrap5\BootstrapPluginAsset' => [
+                    'sourcePath' => null,
+                    'baseUrl' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.1/dist/',
+                    'js' => [
+                        'js/bootstrap.bundle.min.js'
+                    ],
+                ],
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'W1yiqIqPZQ3kN5d1Qv0QE56B3UKjxqFf',

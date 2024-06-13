@@ -7,12 +7,11 @@ use app\models\search\EventSearch;
 use app\modules\admin\models\forms\EventForm;
 use Throwable;
 use Yii;
-use yii\db\Exception;
 use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\Response;
 
 /**
@@ -63,17 +62,23 @@ class EventsController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Event model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    protected function findModel(int $id): Event
+    {
+        if (($model = Event::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 
     /**
@@ -98,18 +103,12 @@ class EventsController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Event model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|Response
-     * @throws NotFoundHttpException|Exception if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $event = $this->findModel($id);
         $model = new EventForm();
         $model->setAttributes($event->attributes);
+        $model->organizatorIds = $event->getOrganizators()->select('id')->column();
         $model->id = $event->id;
 
         if (Yii::$app->request->isPost) {
@@ -137,16 +136,24 @@ class EventsController extends Controller
         return $this->redirect(['index']);
     }
 
-
-    /**
-     * @throws NotFoundHttpException
-     */
-    protected function findModel(int $id): Event
+    public function actionAutocomplete(): array
     {
-        if (($model = Event::findOne(['id' => $id])) !== null) {
-            return $model;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $out = [
+            'results' => [
+                'id' => '',
+                'text' => '',
+            ],
+        ];
+        $str = Yii::$app->request->get('str', '');
+        if ($str !== '') {
+            $query = Event::find()
+                ->select('id, name AS text')
+                ->where(['like', 'LOWER(name)', mb_strtolower($str)])
+                ->limit(20)
+                ->asArray();
+            $out['results'] = $query->all();
         }
-
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        return $out;
     }
 }

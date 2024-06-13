@@ -45,11 +45,6 @@ class OrganizatorsController extends Controller
         );
     }
 
-    /**
-     * Lists all Organizator models.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         $searchModel = new OrganizatorSearch();
@@ -61,12 +56,6 @@ class OrganizatorsController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Organizator model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -74,11 +63,6 @@ class OrganizatorsController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Organizator model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|Response
-     */
     public function actionCreate()
     {
         $model = new OrganizatorForm();
@@ -96,13 +80,6 @@ class OrganizatorsController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Organizator model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate(int $id)
     {
         $organizator = $this->findModel($id);
@@ -123,28 +100,35 @@ class OrganizatorsController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Organizator model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete(int $id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Organizator model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Organizator the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel(int $id)
+    public function actionAutocomplete(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $out = [
+            'results' => [
+                'id' => '',
+                'text' => '',
+            ],
+        ];
+        $str = Yii::$app->request->get('str', '');
+        if ($str !== '') {
+            $query = Organizator::find()
+                ->select('id, fullname AS text')
+                ->where(['like', 'LOWER(fullname)', mb_strtolower($str)])
+                ->limit(20)
+                ->asArray();
+            $out['results'] = $query->all();
+        }
+        return $out;
+    }
+
+    protected function findModel(int $id): Organizator
     {
         if (($model = Organizator::findOne(['id' => $id])) !== null) {
             return $model;
