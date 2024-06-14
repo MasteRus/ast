@@ -28,6 +28,7 @@ class EventForm extends ModelForm
             [['description'], 'string'],
             [['planned_date'], 'date', 'format' => 'yyyy-MM-dd'],
             ['organizatorIds', 'each', 'rule' => ['integer']],
+            ['organizatorIds', 'each', 'rule' => ['exist', 'targetClass' => Organizator::class, 'targetAttribute' => 'id']],
         ];
     }
 

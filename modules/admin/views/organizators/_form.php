@@ -20,7 +20,7 @@ use yii\widgets\{ActiveForm, MaskedInput};
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'phone')->widget(MaskedInput::className(), [
-        'mask' => '+7 (999) 999 99 99',
+        'mask' => '+7-999-999-99-99',
     ])->label(false) ?>
 
     <?= $form->field($model, 'eventIds')

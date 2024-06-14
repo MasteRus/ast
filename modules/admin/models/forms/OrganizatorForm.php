@@ -29,8 +29,8 @@ class OrganizatorForm extends ModelForm
             [
                 'phone',
                 'match',
-                'pattern' => '/^(\+7)\s[(](\d{3})[)]\s(\d{3})\s(\d{2})\s(\d{2})/',
-                'message' => 'Phone must be in format +7(XXX)XXX-XX-XX'
+                'pattern' => '/^(\+7)[-](\d{3})[-](\d{3})[-](\d{2})[-](\d{2})/',
+                'message' => 'Phone must be in format +7-XXX-XXX-XX-XX'
             ],
             ['email', 'email'],
             [
@@ -46,6 +46,7 @@ class OrganizatorForm extends ModelForm
                 'message'         => 'This email already used'
             ],
             ['eventIds', 'each', 'rule' => ['integer']],
+            ['eventIds', 'each', 'rule' => ['exist', 'targetClass' => Event::class, 'targetAttribute' => 'id']],
         ];
     }
 
