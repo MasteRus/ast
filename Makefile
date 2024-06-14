@@ -1,7 +1,7 @@
 start: docker-up
 stop: docker-down
 restart: docker-down docker-up
-init: docker-down-clear docker-pull docker-build docker-up
+init: docker-down-clear docker-pull docker-build docker-up composer-install
 
 docker-up:
 	docker-compose up -d
@@ -17,6 +17,9 @@ docker-pull:
 
 docker-build:
 	docker-compose build
+
+composer-install:
+	docker-compose exec app composer install
 
 migrate:
 	docker-compose exec app php ./yii migrate --interactive=0
