@@ -1,7 +1,7 @@
 start: docker-up
 stop: docker-down
 restart: docker-down docker-up
-init: docker-down-clear docker-pull docker-build docker-up composer-install copy-config
+init: docker-down-clear docker-pull docker-build docker-up composer-install copy-config fix-rights
 
 docker-up:
 	docker-compose up -d
@@ -23,6 +23,9 @@ composer-install:
 
 copy-config:
 	docker-compose exec app cp .env.example .env
+
+fix-rights:
+	docker-compose exec app chown -R 1000:www-data ./
 
 migrate:
 	docker-compose exec app php ./yii migrate --interactive=0
